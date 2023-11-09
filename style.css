@@ -1,0 +1,55 @@
+/* Cards css */
+
+.coinCard {
+    width: 150px;
+    height: auto;
+    background-color: aqua;
+    margin: 20px;
+    padding: 15px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.coinCard:hover {
+    box-shadow: 5px 5px 5px #4B429F;
+}
+
+#cardsResponse {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+.coinCard,
+#cardsResponse {
+    font-family: divFont;
+}
+
+/* Fonts */
+
+@font-face {
+    font-family: divFont;
+    src: url(./Assets/fonts/Questrial-Regular.ttf);
+}
+
+/* ImgDiv */
+.myImgDiv {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+
+}
+
+.myImgDiv:hover {
+    box-shadow: 5px 5px 5px #6e6c7c;
+
+}
