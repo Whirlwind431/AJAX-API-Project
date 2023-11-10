@@ -63,18 +63,29 @@
     // darkMode
     function darkMode() {
         const body = document.body
-        const ifDarkmode = localStorage.getItem('darkMode') === 'true'
+        const darkModeBtn = document.getElementById("darkModeBtn")
 
+        // checking value in local storage' if true - get this value, else - false.
+        // the same with toggle func.
+        const ifDarkmode = localStorage.getItem('darkMode') === 'true'
         localStorage.setItem('darkMode', !ifDarkmode)
         body.classList.toggle('darkMode', !ifDarkmode)
+        darkModeBtn.innerHTML = !ifDarkmode ? 'Light Mode' : 'Dark Mode';
     }
     document.querySelector('.bi').addEventListener("click", darkMode)
 
+
+
+    // save dark/light mode if you're refreshing page
     function onload() {
+        const ifDarkmode = localStorage.getItem('darkMode') === 'true';
         document.body.classList.toggle('darkMode', localStorage.getItem('darkMode') === 'true')
+        document.getElementById("darkModeBtn").innerHTML = !ifDarkmode ? 'Dark Mode' : 'Light Mode';
+
     }
+
     document.addEventListener('DOMContentLoaded', onload)
 
-    
+
 
 })()
