@@ -44,22 +44,44 @@
     // display all coins on the screen
     function displayAllCoins(coins) {
         const divResponse = document.getElementById("cardsResponse")
-        let html = ""
         for (let i = 0; i < 100; i++) {
-            html +=
-                `
-            <div class="coinCard">
-             <h2>${coins[i].name}</h2>
-             <h3>${coins[i].symbol}</h3>
-             <img class="myImgDiv" src="${coins[i].image} ">
-            </div>
+            const index = coins.indexOf(coins[i])
+            const divElement = document.createElement('div')
+            const coinName = document.createElement('h3')
+            const coinSymbol = document.createElement('p')
+            const coinImg = document.createElement('img')
+            const brakeEl = document.createElement('br')
+            const moreInfoBrn = document.createElement('button')
 
-        `
+            // css 
+            divElement.setAttribute("class", "coinCard")
+            coinImg.setAttribute("src", `${coins[i].image}`)
+            coinImg.setAttribute("class", "myImgDiv")
+
+
+            // set data into cells
+            coinName.innerHTML = `${coins[i].name}`
+            coinSymbol.innerHTML = `${coins[i].symbol}`
+            moreInfoBrn.innerHTML = "More info"
+            // buttons
+            moreInfoBrn.addEventListener("click", function () {
+                moreInfo(index)
+            })
+
+            // append elements to our main divCards
+            divElement.appendChild(coinName)
+            divElement.appendChild(coinSymbol)
+            divElement.appendChild(coinImg)
+            divElement.appendChild(brakeEl)
+            divElement.appendChild(moreInfoBrn)
+            divResponse.appendChild(divElement)
+
         }
-        divResponse.innerHTML = html
-
     }
 
+
+
+    // ---------------------------------------------------------
     // darkMode
     function darkMode() {
         const body = document.body
@@ -74,8 +96,6 @@
     }
     document.querySelector('.bi').addEventListener("click", darkMode)
 
-
-
     // save dark/light mode if you're refreshing page
     function onload() {
         const ifDarkmode = localStorage.getItem('darkMode') === 'true';
@@ -83,8 +103,17 @@
         document.getElementById("darkModeBtn").innerHTML = !ifDarkmode ? 'Dark Mode' : 'Light Mode';
 
     }
-
     document.addEventListener('DOMContentLoaded', onload)
+    // ---------------------------------------------------------
+
+
+
+
+    function moreInfo(index) {
+
+        console.log(`clicked element ${index}`);
+    }
+
 
 
 
