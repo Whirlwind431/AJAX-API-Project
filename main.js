@@ -64,7 +64,7 @@
             moreInfoBtn.innerHTML = "More info"
             // buttons
             moreInfoBtn.addEventListener("click", function () {
-                myFunction(index)
+                dropDownFunc(index)
             })
 
 
@@ -90,14 +90,28 @@
             linkB.innerHTML = `Price:${(coins[i].current_price / 1.07).toFixed(2)}€`
             linkC.innerHTML = `Price:${(coins[i].current_price / 0.26).toFixed(2)}₪`
 
+            // toogle switch
+            const labelSwitch = document.createElement('LABEL')
+            const inputSwitch = document.createElement('INPUT')
+            const spanSwitch = document.createElement('SPAN')
+
+            // css 
+            labelSwitch.setAttribute("class", "switch")
+            inputSwitch.setAttribute("type", "checkbox")
+            spanSwitch.setAttribute("class", "slider round")
+
+
+
 
 
             // append elements to our main divCards
             divElement.appendChild(coinName)
+            divElement.appendChild(labelSwitch)
             divElement.appendChild(coinSymbol)
             divElement.appendChild(coinImg)
             divElement.appendChild(brakeEl)
 
+            // dropdown menu - more info btn
             divDropdown.appendChild(moreInfoBtn)
             interiorDiv.appendChild(linkA)
             interiorDiv.appendChild(linkB)
@@ -105,6 +119,9 @@
             divDropdown.appendChild(interiorDiv)
             divElement.appendChild(divDropdown)
 
+            // toogle switch
+            labelSwitch.appendChild(inputSwitch)
+            labelSwitch.appendChild(spanSwitch)
             // append to main div
             divResponse.appendChild(divElement)
 
@@ -141,7 +158,7 @@
     // Dropdown menu 
     // When the user clicks on the button,
     // toggle between hiding and showing the dropdown content 
-    function myFunction(index) {
+    function dropDownFunc(index) {
         const dropdown = document.getElementById(`myDropdown${index}`);
         dropdown.classList.toggle("show");
     }
