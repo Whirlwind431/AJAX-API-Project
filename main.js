@@ -59,4 +59,22 @@
         divResponse.innerHTML = html
 
     }
+
+    // darkMode
+    function darkMode() {
+        const body = document.body
+        const ifDarkmode = localStorage.getItem('darkMode') === 'true'
+
+        localStorage.setItem('darkMode', !ifDarkmode)
+        body.classList.toggle('darkMode', !ifDarkmode)
+    }
+    document.querySelector('.bi').addEventListener("click", darkMode)
+
+    function onload() {
+        document.body.classList.toggle('darkMode', localStorage.getItem('darkMode') === 'true')
+    }
+    document.addEventListener('DOMContentLoaded', onload)
+
+    
+
 })()

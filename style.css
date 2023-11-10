@@ -3,10 +3,10 @@
 .coinCard {
     width: 150px;
     height: auto;
-    background-color: aqua;
+    background-color: white;
     margin: 20px;
     padding: 15px;
-    border: 1px solid black;
+    border: 1px solid rgb(0, 0, 0);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -14,6 +14,7 @@
     text-align: center;
     word-wrap: break-word;
     overflow: hidden;
+    color: rgb(67, 83, 83);
 }
 
 .coinCard:hover {
@@ -51,5 +52,27 @@
 
 .myImgDiv:hover {
     box-shadow: 5px 5px 5px #6e6c7c;
+
+}
+
+/* dark mode */
+body {
+    background-color: white;
+    color: #373737;
+    transition: all .3s ease;
+}
+
+
+.darkMode {
+    color: white;
+    background-color: #373737;
+}
+
+.darkModeBtn {
+    cursor: pointer;
+}
+
+.darkModeDiv {
+    background-color: violet;
 
 }
