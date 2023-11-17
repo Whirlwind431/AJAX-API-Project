@@ -103,7 +103,7 @@ body {
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-    position: absolute;
+    /* position: absolute; */
     display: none;
     background-color: #f1f1f1;
     min-width: 150px;
@@ -212,3 +212,4 @@ input:checked+.slider:before {
 }
 
 /* ---------------------------------------------------------- */
+/* navbar */

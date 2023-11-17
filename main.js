@@ -5,7 +5,16 @@
     "use strict"
 
     let arr = []
+    let arrayReports = []
+    const divResponse = document.getElementById("cardsResponse")
+
     webInit()
+
+    // // Function not refreshing for page
+    // navBar.addEventListener("submit", (event) => {
+    //     event.preventDefault();
+    // });
+
 
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
@@ -43,15 +52,18 @@
 
     // display all coins on the screen
     function displayAllCoins(coins) {
-        const divResponse = document.getElementById("cardsResponse")
         for (let i = 1; i <= 100; i++) {
             const index = coins.indexOf(coins[i])
+            const item = coins[i];
             const divElement = document.createElement('div')
             const coinName = document.createElement('h3')
             const coinSymbol = document.createElement('p')
             const coinImg = document.createElement('img')
             const brakeEl = document.createElement('br')
             const moreInfoBtn = document.createElement('button')
+            const testButton = document.createElement('button')
+            testButton.innerHTML = "Add to reports"
+            testButton.addEventListener("click", () => addToReports(item))
 
             // css 
             divElement.setAttribute("class", "coinCard")
@@ -62,6 +74,8 @@
             coinName.innerHTML = `${coins[i].name}`
             coinSymbol.innerHTML = `${coins[i].symbol}`
             moreInfoBtn.innerHTML = "More info"
+
+
             // buttons
             moreInfoBtn.addEventListener("click", function () {
                 dropDownFunc(index)
@@ -99,16 +113,17 @@
             labelSwitch.setAttribute("class", "switch")
             inputSwitch.setAttribute("type", "checkbox")
             spanSwitch.setAttribute("class", "slider round")
+            inputSwitch.addEventListener("click", () => addToReports(item))
 
 
 
 
 
             // append elements to our main divCards
+            divElement.appendChild(coinImg)
             divElement.appendChild(coinName)
             divElement.appendChild(labelSwitch)
             divElement.appendChild(coinSymbol)
-            divElement.appendChild(coinImg)
             divElement.appendChild(brakeEl)
 
             // dropdown menu - more info btn
@@ -123,6 +138,7 @@
             labelSwitch.appendChild(inputSwitch)
             labelSwitch.appendChild(spanSwitch)
             // append to main div
+            divElement.appendChild(testButton)
             divResponse.appendChild(divElement)
 
         }
@@ -176,6 +192,60 @@
             }
         }
     }
+    // --------------------------------------------------------
+    // reports 
+    // check if you have any data in local storage
+    function ifExistReports() {
+        const myData = localStorage.getItem("reports")
+        if (myData !== null) {
+            arrayReports = JSON.parse(myData);
+        }
+    }
+
+    // add new crypto to reports array
+    function addToReports(item) {
+
+        ifExistReports()
+        if (!arrayReports.some((report) => report.id === item.id) && arrayReports.length < 5) {
+            arrayReports.push(item)
+            const json = JSON.stringify(arrayReports)
+            localStorage.setItem("reports", json)
+        } else {
+            alert("Item not added to reports. Either already exists or maximum limit reached.");
+        }
+    }
+
+    // show your chosen crypto in pop-up 
+    function printReports() {
+        ifExistReports()
+        let popupText_id = document.getElementById('popupText_id')
+        let html = ''
+        if (arrayReports.length === 0) {
+            html += `<p <h4 class="">You don't have any crypto!Please add them!</h4></p></div>`
+            popupText_id.innerHTML = html;
+        } else {
+            // displayAllCoins()
+            for (const item of arrayReports) {
+                html += `<div class='coinCard ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`;
+                html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
+                html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`;
+                html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`;
+                html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p></div>`
+            }
+            popupText_id.innerHTML = html
+        }
+    }
+
+    // add some function to print your choosen cryptos
+    document.getElementById("reports").addEventListener("click", printReports)
+
+
+
+
+
+    // --------------------------------------------------------
+
+
 
 
 
