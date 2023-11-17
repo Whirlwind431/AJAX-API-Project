@@ -26,7 +26,7 @@
     visibility: visible;
 }
 
-.popup:target .popup_content{
+.popup:target .popup_content {
     transform: perspective(600px) translate(0px, 0%) rotateX(0deg);
     opacity: 1;
 }
@@ -44,14 +44,14 @@
 .popup_content {
     background-color: aqua;
     color: #000;
-    max-width: 800px;
+    width: 450px;
     padding: 30px;
     position: relative;
     transition: all 0.8s ease 0s;
     opacity: 0;
     transform: perspective(600px) translate(0px, -100%) rotateX(45deg);
     border-radius: 50px;
-    
+
 
 }
 
@@ -70,5 +70,28 @@
     margin: 0px 0px 1em 0px;
     font-family: HeaderFont;
     display: flex;
-    justify-content:center ;
+    justify-content: center;
+}
+
+.popup_text {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.coinCardPopUp{
+    width: 150px;
+    height: auto;
+    background-color: white;
+    margin: 20px;
+    padding: 5px;
+    border: 1px solid rgb(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    word-wrap: break-word;
+    overflow: hidden;
+    color: rgb(67, 83, 83);
 }

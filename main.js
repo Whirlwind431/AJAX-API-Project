@@ -21,9 +21,7 @@
         const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2")
         // const response = await fetch("https://api.coingecko.com/api/v3/coins/list")
         console.log(response)
-
         const coins = await response.json() // 
-
         displayAllCoins(coins)
         return coins
     }
@@ -61,9 +59,6 @@
             const coinImg = document.createElement('img')
             const brakeEl = document.createElement('br')
             const moreInfoBtn = document.createElement('button')
-            const testButton = document.createElement('button')
-            testButton.innerHTML = "Add to reports"
-            testButton.addEventListener("click", () => addToReports(item))
 
             // css 
             divElement.setAttribute("class", "coinCard")
@@ -81,7 +76,7 @@
                 dropDownFunc(index)
             })
 
-
+            //-------------------------------------------------------------
             // dropdown menu
             const divDropdown = document.createElement('div')
             const interiorDiv = document.createElement('div')
@@ -104,10 +99,98 @@
             linkB.innerHTML = `Price:${(coins[i].current_price / 1.07).toFixed(2)}€`
             linkC.innerHTML = `Price:${(coins[i].current_price / 0.26).toFixed(2)}₪`
 
+            //-------------------------------------------------------------
             // toogle switch
+            const switchBtnDiv = document.createElement('div')
+            const switchBtnInput = document.createElement('INPUT')
+            const switchBtnLabel = document.createElement('LABEL')
 
 
+            // css 
+            switchBtnDiv.setAttribute("class", "form-check form-switch")
+            switchBtnInput.setAttribute("class", "form-check-input")
+            switchBtnInput.setAttribute("type", "checkbox")
+            switchBtnInput.setAttribute("role", "switch")
 
+            //-----------------------------------------------
+
+            // reports 
+            // show your chosen crypto in pop-up 
+            function printReports() {
+                ifExistReports()
+                let popupText_id = document.getElementById('popupText_id')
+                let html = ''
+                if (arrayReports.length === 0) {
+                    html += `<p <h4 class="">You don't have any crypto!Please add them!</h4></p></div>`
+                    popupText_id.innerHTML = html;
+                } else {
+                    // displayAllCoins()
+                    for (const item of arrayReports) {
+                        html += `<div class='coinCardPopUp ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`;
+                        html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
+                        html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`;
+                        html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`;
+                        html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p></div>`
+                    }
+                    popupText_id.innerHTML = html
+                }
+            }
+            // check if you have any data in local storage
+            function ifExistReports() {
+                const myData = localStorage.getItem("reports")
+                if (myData !== null) {
+                    arrayReports = JSON.parse(myData);
+                }
+                return arrayReports.some((report) => report.id === item.id);
+
+            }
+            // Initialize switch state based on local storage
+            if (ifExistReports(item)) {
+                switchBtnInput.checked = true;
+                if (switchBtnInput.checked === false) {
+                    reportError.split(item, 1)
+                }
+            }
+
+            // add new crypto to reports array
+            function addToReports(item) {
+                if (!ifExistReports(item)) {
+                    // Remove previous attributes
+                    switchBtnInput.removeAttribute("id");
+                    switchBtnLabel.removeAttribute("class");
+                    switchBtnLabel.removeAttribute("for");
+                    // check if array already has this crypto
+                    if (!arrayReports.some((report) => report.id === item.id) && arrayReports.length < 5) {
+                        arrayReports.push(item)
+                        const json = JSON.stringify(arrayReports)
+                        localStorage.setItem("reports", json)
+                        // Set new attributes
+                        switchBtnInput.setAttribute("id", "flexSwitchCheckChecked");
+                        switchBtnInput.setAttribute("checked", "checked");
+                        switchBtnLabel.setAttribute("for", "flexSwitchCheckChecked");
+                        switchBtnInput.checked = true
+                    } else {
+                        alert("Item not added to reports. Either already exists or maximum limit reached.");
+                        // Set default attributes
+                        switchBtnInput.checked = false
+                    }
+                } else {
+                    // Delete from reports
+                    arrayReports = arrayReports.filter((report) => report.id !== item.id);
+                    const json = JSON.stringify(arrayReports);
+                    localStorage.setItem("reports", json);
+                }
+            }
+
+            // add some function to print your choosen cryptos
+            document.getElementById("reports").addEventListener("click", printReports)
+            switchBtnInput.addEventListener('change', () => addToReports(item));
+
+            // toogle switch append children
+            switchBtnDiv.appendChild(switchBtnLabel)
+            switchBtnDiv.appendChild(switchBtnInput)
+            divElement.appendChild(switchBtnDiv)
+            //-----------------------------------------------
 
             // append elements to our main divCards
             divElement.appendChild(coinImg)
@@ -123,11 +206,7 @@
             divDropdown.appendChild(interiorDiv)
             divElement.appendChild(divDropdown)
 
-            // toogle switch
-        
-            
             // append to main div
-            divElement.appendChild(testButton)
             divResponse.appendChild(divElement)
 
         }
@@ -182,57 +261,13 @@
         }
     }
     // --------------------------------------------------------
-    // reports 
-    // check if you have any data in local storage
-    function ifExistReports() {
-        const myData = localStorage.getItem("reports")
-        if (myData !== null) {
-            arrayReports = JSON.parse(myData);
-        }
-    }
-
-    // add new crypto to reports array
-    function addToReports(item) {
-
-        ifExistReports()
-        if (!arrayReports.some((report) => report.id === item.id) && arrayReports.length < 5) {
-            arrayReports.push(item)
-            const json = JSON.stringify(arrayReports)
-            localStorage.setItem("reports", json)
-        } else {
-            alert("Item not added to reports. Either already exists or maximum limit reached.");
-        }
-    }
-
-    // show your chosen crypto in pop-up 
-    function printReports() {
-        ifExistReports()
-        let popupText_id = document.getElementById('popupText_id')
-        let html = ''
-        if (arrayReports.length === 0) {
-            html += `<p <h4 class="">You don't have any crypto!Please add them!</h4></p></div>`
-            popupText_id.innerHTML = html;
-        } else {
-            // displayAllCoins()
-            for (const item of arrayReports) {
-                html += `<div class='coinCard ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`;
-                html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
-                html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`;
-                html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`;
-                html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p></div>`
-            }
-            popupText_id.innerHTML = html
-        }
-    }
-
-    // add some function to print your choosen cryptos
-    document.getElementById("reports").addEventListener("click", printReports)
 
 
 
 
 
-    // --------------------------------------------------------
+
+
 
 
 
