@@ -105,16 +105,6 @@
             linkC.innerHTML = `Price:${(coins[i].current_price / 0.26).toFixed(2)}₪`
 
             // toogle switch
-            const labelSwitch = document.createElement('LABEL')
-            const inputSwitch = document.createElement('INPUT')
-            const spanSwitch = document.createElement('SPAN')
-
-            // css 
-            labelSwitch.setAttribute("class", "switch")
-            inputSwitch.setAttribute("type", "checkbox")
-            spanSwitch.setAttribute("class", "slider round")
-            inputSwitch.addEventListener("click", () => addToReports(item))
-
 
 
 
@@ -122,7 +112,6 @@
             // append elements to our main divCards
             divElement.appendChild(coinImg)
             divElement.appendChild(coinName)
-            divElement.appendChild(labelSwitch)
             divElement.appendChild(coinSymbol)
             divElement.appendChild(brakeEl)
 
@@ -135,8 +124,8 @@
             divElement.appendChild(divDropdown)
 
             // toogle switch
-            labelSwitch.appendChild(inputSwitch)
-            labelSwitch.appendChild(spanSwitch)
+        
+            
             // append to main div
             divElement.appendChild(testButton)
             divResponse.appendChild(divElement)
