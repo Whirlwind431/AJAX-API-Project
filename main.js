@@ -54,7 +54,7 @@
             const coinImg = document.createElement('img')
             const brakeEl = document.createElement('br')
             const moreInfoBtn = document.createElement('button')
-         
+
 
             // css 
             divElement.setAttribute("class", "coinCard")
@@ -164,9 +164,9 @@
                 // Assuming you have a function to prompt the user to select another item
                 const newItemSymbol = prompt("Select another item - symbol:").toLowerCase();
                 if (newItemSymbol !== null) {
-                    const existingItemIndex  = arrayReports.findIndex(item => item.symbol === clickedItemSymbol);
+                    const existingItemIndex = arrayReports.findIndex(item => item.symbol === clickedItemSymbol);
                     const newItem = arr.find(item => item.symbol === newItemSymbol);
-                    if (existingItemIndex  !== -1 && newItem && !arrayReports.some((report) => report.symbol === newItem.symbol)) {
+                    if (existingItemIndex !== -1 && newItem && !arrayReports.some((report) => report.symbol === newItem.symbol)) {
                         arrayReports[existingItemIndex] = newItem;
                         localStorage.setItem("reports", JSON.stringify(arrayReports));
                         console.log(`Changed item with ID ${clickedItemSymbol} to ${newItemSymbol}`);
@@ -175,7 +175,7 @@
                     } else {
                         console.log("Invalid item selection or already exists or item not found.");
                     }
-                  
+
 
                 }
             }
@@ -188,7 +188,7 @@
                         changeBtn.addEventListener("click", () => {
                             changeBtnfunc(item.symbol);
                         })
-                      
+
                     }
 
                 });
@@ -214,7 +214,7 @@
                     }
                     popupText_id.innerHTML = html
                     change()
-                    
+
                 }
 
             }
@@ -254,35 +254,45 @@
     // ---------------------------------------------------------
     // darkMode
     function darkMode() {
-        const myNav = document.getElementById("myNav")
-        const body = document.body
-        const darkModeBtn = document.getElementById("darkModeBtn")
+        const body = document.body;
+        const darkModeBtn = document.getElementById("darkModeBtn");
 
-        // checking value in local storage' if true - get this value, else - false.
-        // the same with toggle func.
-        const ifDarkmode = localStorage.getItem('darkMode') === 'true'
-        localStorage.setItem('darkMode', !ifDarkmode)
-        body.classList.toggle('darkMode', !ifDarkmode)
-        darkModeBtn.innerHTML = !ifDarkmode ? 'Light Mode' : 'Dark Mode';
+        // Get the current dark mode state from local storage - get this if true, else = false
+        const ifDarkmode = localStorage.getItem('darkMode') === 'true';
+        console.log(ifDarkmode);
 
-        //  if dark mode is active set the attribute else remove
-        if (!ifDarkmode) {
-            myNav.setAttribute("data-bs-theme", "dark");
+        // Toggle the dark mode state
+        const newDarkModeState = !ifDarkmode;
+        localStorage.setItem('darkMode', newDarkModeState);
+
+        body.classList.toggle('darkMode', newDarkModeState);
+        darkModeBtn.innerHTML = newDarkModeState ? 'Light Mode' : 'Dark Mode';
+
+        if (newDarkModeState) {
+            body.setAttribute("data-bs-theme", "dark");
         } else {
-            myNav.removeAttribute("data-bs-theme");
+            body.removeAttribute("data-bs-theme");
         }
-
-
-
     }
-    document.querySelector('.bi').addEventListener("click", darkMode)
 
-    // save dark/light mode if you're refreshing page
+    document.getElementById("darkModeBtn").addEventListener("click", darkMode);
+
+    // Save dark/light mode if you're refreshing the page
     function onload() {
         const ifDarkmode = localStorage.getItem('darkMode') === 'true';
-        document.body.classList.toggle('darkMode', localStorage.getItem('darkMode') === 'true')
-        document.getElementById("darkModeBtn").innerHTML = !ifDarkmode ? 'Dark Mode' : 'Light Mode';
+        const body = document.body;
+        const darkModeBtn = document.getElementById("darkModeBtn");
 
+
+        // Set the class, button text, and attribute based on the current state
+        body.classList.toggle('darkMode', ifDarkmode);
+        darkModeBtn.innerHTML = ifDarkmode ? 'Light Mode' : 'Dark Mode';
+
+        if (ifDarkmode) {
+            body.setAttribute("data-bs-theme", "dark");
+        } else {
+            body.removeAttribute("data-bs-theme");
+        }
     }
     document.addEventListener('DOMContentLoaded', onload)
     // ---------------------------------------------------------
