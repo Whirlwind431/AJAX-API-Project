@@ -115,26 +115,6 @@
             //-----------------------------------------------
 
             // reports 
-            // show your chosen crypto in pop-up 
-            function printReports() {
-                ifExistReports()
-                let popupText_id = document.getElementById('popupText_id')
-                let html = ''
-                if (arrayReports.length === 0) {
-                    html += `<p <h4 class="">You don't have any crypto!Please add them!</h4></p></div>`
-                    popupText_id.innerHTML = html;
-                } else {
-                    // displayAllCoins()
-                    for (const item of arrayReports) {
-                        html += `<div class='coinCardPopUp ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`;
-                        html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
-                        html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`;
-                        html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`;
-                        html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p></div>`
-                    }
-                    popupText_id.innerHTML = html
-                }
-            }
             // check if you have any data in local storage
             function ifExistReports() {
                 const myData = localStorage.getItem("reports")
@@ -142,7 +122,6 @@
                     arrayReports = JSON.parse(myData);
                 }
                 return arrayReports.some((report) => report.id === item.id);
-
             }
             // Initialize switch state based on local storage
             if (ifExistReports(item)) {
@@ -182,6 +161,61 @@
                 }
             }
 
+
+
+            // CHANGE FUNCTIONS FOR REPORT ARRAY
+            function changeBtnfunc(clickedItemId) {
+                // Assuming you have a function to prompt the user to select another item
+                const newItemId = prompt("Select another item:");
+
+                if (newItemId !== null) {
+                    const existingItemIndex = arrayReports.findIndex(item => item.id === clickedItemId);
+                    const newItem = arr.find(item => item.id === newItemId);
+
+                    if (existingItemIndex !== -1 && newItem && !arrayReports.some((report) => report.id === newItem.id)) {
+                        arrayReports[existingItemIndex] = newItem;
+                        localStorage.setItem("reports", JSON.stringify(arrayReports));
+                        console.log(`Changed item with ID ${clickedItemId} to ${newItemId}`);
+                        printReports(); // Update the display
+                    } else {
+                        console.log("Invalid item selection or already exists or item not found.");
+                    }
+                }
+            }
+
+            function change() {
+                // Add event listener to the "Change this crypto" buttons
+                arrayReports.forEach(item => {
+                    const changeBtn = document.getElementById(`changeBtn_${item.id}`);
+                    if (changeBtn) {
+                        changeBtn.addEventListener("click", () => changeBtnfunc(item.id));
+                    }
+                });
+            }
+
+            // show your chosen crypto in pop-up 
+            function printReports() {
+                ifExistReports()
+                let popupText_id = document.getElementById('popupText_id')
+                let html = ''
+                if (arrayReports.length === 0) {
+                    html += `<div><p <h4 class="">You don't have any crypto!Please add them!</h4></p></div>`
+                    popupText_id.innerHTML = html;
+                } else {
+                    for (const item of arrayReports) {
+                        html += `<div class='coinCardPopUp ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`;
+                        html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
+                        html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`;
+                        html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`;
+                        html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p>`
+                        html += `<button id="changeBtn_${item.id}" type="button" class="btn btn-warning">Change this crypto</button></div>`
+                    }
+                    popupText_id.innerHTML = html
+                    change()
+                }
+
+            }
+
             // add some function to print your choosen cryptos
             document.getElementById("reports").addEventListener("click", printReports)
             switchBtnInput.addEventListener('change', () => addToReports(item));
@@ -198,7 +232,7 @@
             divElement.appendChild(coinSymbol)
             divElement.appendChild(brakeEl)
 
-            // dropdown menu - more info btn
+            // dropdown menu append children
             divDropdown.appendChild(moreInfoBtn)
             interiorDiv.appendChild(linkA)
             interiorDiv.appendChild(linkB)
