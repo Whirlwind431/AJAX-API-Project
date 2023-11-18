@@ -2,11 +2,28 @@
 
 (() => {
     "use strict"
-
+    // Global variables
+    const ctx = document.getElementById('mainChart');
+    const mainChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: []
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
     let arr = []
     let arrayReports = []
     const divResponse = document.getElementById("cardsResponse")
+    const homePage = document.getElementById("homePage")
 
+    // run our website
     webInit()
 
     // fetch all coins from server
@@ -322,7 +339,37 @@
     searchInputId.addEventListener("click", createCoinCardBySearch);
     searchInputId.addEventListener("keyup", createCoinCardBySearch);
 
+    // chart
+    const canvasSection = document.getElementById("canvasSection")
+    function showChart() {
+        canvasSection.style.display = 'flex';
+        divResponse.style.display = 'none';
+    }
 
 
+    function createMainChart() {
+        const myDataAll = localStorage.getItem('reports');
+        const dataAll = JSON.parse(myDataAll)
+        showChart()
+        const dataSet = dataAll.map(x => ({
+            label: x.id,
+            data: [x.current_price, x.current_price, x.current_price, x.current_price],
+            borderWidth: 1
 
+        }))
+
+        mainChart.data.labels = [1, 2, 3, 'Today']
+        mainChart.data.datasets = dataSet;
+
+        mainChart.update();
+    }
+
+
+    let charts = document.getElementById("charts")
+    charts.addEventListener("click", () => createMainChart())
+    homePage.addEventListener("click", function () {
+        canvasSection.style.display = 'none';
+        divResponse.style.display = 'flex';
+        displayAllCoins(arr, arr.length)
+    })
 })()
