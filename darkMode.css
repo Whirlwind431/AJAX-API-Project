@@ -1,0 +1,22 @@
+/* dark mode--------------------------------------------------- */
+body {
+    background-color: white;
+    color: #373737;
+    transition: all .3s ease;
+}
+
+
+.darkMode {
+    color: white;
+    background-color: #373737;
+}
+
+.darkModeBtn {
+    cursor: pointer;
+}
+
+.darkModeDiv {
+    background-color: violet;
+
+}
+

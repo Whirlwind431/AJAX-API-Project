@@ -169,7 +169,6 @@
                         console.log(`Changed item with ID ${clickedItemSymbol} to ${newItemSymbol}`);
                         printReports(); // Update the display
                         displayAllCoins(arr, arr.length)
-
                     } else {
                         console.log("Invalid item selection or already exists or item not found.");
                     }
