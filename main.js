@@ -28,7 +28,7 @@
         localStorage.setItem("coins", arr)
     }
 
-    // webInit function 
+    // main function 
     function webInit() {
         const coins = localStorage.getItem('coins')
         if (coins !== null) {
@@ -147,16 +147,13 @@
                         // Set default attributes
                         switchBtnInput.checked = false
                     }
-
                 } else {
                     // Delete from reports
                     arrayReports = arrayReports.filter((report) => report.id !== item.id);
                     const json = JSON.stringify(arrayReports);
                     localStorage.setItem("reports", json);
                 }
-
             }
-
 
 
             // CHANGE FUNCTIONS FOR REPORT ARRAY
@@ -171,12 +168,11 @@
                         localStorage.setItem("reports", JSON.stringify(arrayReports));
                         console.log(`Changed item with ID ${clickedItemSymbol} to ${newItemSymbol}`);
                         printReports(); // Update the display
+                        displayAllCoins(arr, arr.length)
 
                     } else {
                         console.log("Invalid item selection or already exists or item not found.");
                     }
-
-
                 }
             }
 
@@ -188,11 +184,8 @@
                         changeBtn.addEventListener("click", () => {
                             changeBtnfunc(item.symbol);
                         })
-
                     }
-
                 });
-
             }
 
             // show your chosen crypto in pop-up 
@@ -214,11 +207,8 @@
                     }
                     popupText_id.innerHTML = html
                     change()
-
                 }
-
             }
-
             // add some function to print your choosen cryptos
             document.getElementById("reports").addEventListener("click", printReports)
             switchBtnInput.addEventListener('change', () => addToReports(item));
@@ -248,10 +238,10 @@
 
         }
     }
-
-
-
     // ---------------------------------------------------------
+
+
+
     // darkMode
     function darkMode() {
         const body = document.body;
