@@ -1,20 +1,12 @@
 
 
-
 (() => {
     "use strict"
 
     let arr = []
     let arrayReports = []
     const divResponse = document.getElementById("cardsResponse")
-
     webInit()
-
-    // // Function not refreshing for page
-    // navBar.addEventListener("submit", (event) => {
-    //     event.preventDefault();
-    // });
-
 
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
@@ -44,15 +36,15 @@
         } else {
             addToLocalStorage()
         }
-        displayAllCoins(arr)
+        displayAllCoins(arr, arr.length)
     }
 
 
     // display all coins on the screen
-    function displayAllCoins(coins) {
-        for (let i = 1; i <= 100; i++) {
-            const index = coins.indexOf(coins[i])
-            const item = coins[i];
+    function displayAllCoins(someArray, count) {
+        for (let i = 0; i < count; i++) {
+            const index = someArray.indexOf(someArray[i])
+            const item = someArray[i];
             const divElement = document.createElement('div')
             const coinName = document.createElement('h3')
             const coinSymbol = document.createElement('p')
@@ -62,14 +54,15 @@
 
             // css 
             divElement.setAttribute("class", "coinCard")
-            coinImg.setAttribute("src", `${coins[i].image}`)
+            coinImg.setAttribute("src", `${someArray[i].image}`)
             coinImg.setAttribute("class", "myImgDiv")
 
-            // set data into cells
-            coinName.innerHTML = `${coins[i].name}`
-            coinSymbol.innerHTML = `${coins[i].symbol}`
-            moreInfoBtn.innerHTML = "More info"
 
+
+            // set data into cells
+            coinName.innerHTML = `${someArray[i].name}`
+            coinSymbol.innerHTML = `${someArray[i].symbol}`
+            moreInfoBtn.innerHTML = "More info"
 
             // buttons
             moreInfoBtn.addEventListener("click", function () {
@@ -95,9 +88,9 @@
             moreInfoBtn.setAttribute("data-dropdown", `myDropdown${i}`);
 
             moreInfoBtn.setAttribute("class", "dropbtn")
-            linkA.innerHTML = `Price:${(coins[i].current_price).toFixed(2)}$`
-            linkB.innerHTML = `Price:${(coins[i].current_price / 1.07).toFixed(2)}€`
-            linkC.innerHTML = `Price:${(coins[i].current_price / 0.26).toFixed(2)}₪`
+            linkA.innerHTML = `Price:${(someArray[i].current_price).toFixed(2)}$`
+            linkB.innerHTML = `Price:${(someArray[i].current_price / 1.07).toFixed(2)}€`
+            linkC.innerHTML = `Price:${(someArray[i].current_price / 0.26).toFixed(2)}₪`
 
             //-------------------------------------------------------------
             // toogle switch
@@ -192,6 +185,7 @@
                     }
                 });
             }
+
 
             // show your chosen crypto in pop-up 
             function printReports() {
@@ -296,17 +290,16 @@
     }
     // --------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Show coins by search (on  key down)
+    function createCoinCardBySearch() {
+        let searchInputId = document.getElementById("searchInputId")
+        divResponse.innerHTML = "";
+        const newArray = arr.filter(item => item.symbol.toLowerCase().includes(searchInputId.value.toLowerCase()));
+        console.log(newArray);
+        let count = newArray.length
+        displayAllCoins(newArray, count);
+    }
+    searchInputId.addEventListener("keydown", createCoinCardBySearch);
+    searchInputId.addEventListener("click", createCoinCardBySearch);
+    searchInputId.addEventListener("keyup", createCoinCardBySearch);
 })()

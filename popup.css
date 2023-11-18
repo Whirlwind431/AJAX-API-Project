@@ -34,7 +34,7 @@
 
 
 .popup_area {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     top: 0;
@@ -47,16 +47,16 @@
     width: 420px;
     padding: 20px;
     position: relative;
-    transition: all 0.8s ease 0s;
+    transition: all 1s ease 0s;
     opacity: 0;
-    transform: perspective(600px) translate(0px, -100%) rotateX(45deg);
+    transform: perspective(500px) translate(0px, -100%) rotatey(180deg) rotatex(60deg);
     border-radius: 50px;
 
 
 }
 
 .popup_close {
-    position: absolute;
+    position:sticky;
     right: 30px;
     top: 10px;
     font-size: 20px;
