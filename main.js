@@ -245,6 +245,7 @@
     // ---------------------------------------------------------
     // darkMode
     function darkMode() {
+        const myNav = document.getElementById("myNav")
         const body = document.body
         const darkModeBtn = document.getElementById("darkModeBtn")
 
@@ -254,6 +255,16 @@
         localStorage.setItem('darkMode', !ifDarkmode)
         body.classList.toggle('darkMode', !ifDarkmode)
         darkModeBtn.innerHTML = !ifDarkmode ? 'Light Mode' : 'Dark Mode';
+
+        //  if dark mode is active set the attribute else remove
+        if (!ifDarkmode) {
+            myNav.setAttribute("data-bs-theme", "dark");
+        } else {
+            myNav.removeAttribute("data-bs-theme");
+        }
+
+
+
     }
     document.querySelector('.bi').addEventListener("click", darkMode)
 
