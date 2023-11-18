@@ -6,6 +6,7 @@
     let arr = []
     let arrayReports = []
     const divResponse = document.getElementById("cardsResponse")
+
     webInit()
 
     // fetch all coins from server
@@ -42,6 +43,8 @@
 
     // display all coins on the screen
     function displayAllCoins(someArray, count) {
+        // Clear 
+        divResponse.innerHTML = '';
         for (let i = 0; i < count; i++) {
             const index = someArray.indexOf(someArray[i])
             const item = someArray[i];
@@ -51,17 +54,16 @@
             const coinImg = document.createElement('img')
             const brakeEl = document.createElement('br')
             const moreInfoBtn = document.createElement('button')
+         
 
             // css 
             divElement.setAttribute("class", "coinCard")
-            coinImg.setAttribute("src", `${someArray[i].image}`)
+            coinImg.setAttribute("src", `${item.image}`)
             coinImg.setAttribute("class", "myImgDiv")
 
-
-
             // set data into cells
-            coinName.innerHTML = `${someArray[i].name}`
-            coinSymbol.innerHTML = `${someArray[i].symbol}`
+            coinName.innerHTML = `${item.name}`
+            coinSymbol.innerHTML = `${item.symbol}`
             moreInfoBtn.innerHTML = "More info"
 
             // buttons
@@ -88,9 +90,9 @@
             moreInfoBtn.setAttribute("data-dropdown", `myDropdown${i}`);
 
             moreInfoBtn.setAttribute("class", "dropbtn")
-            linkA.innerHTML = `Price:${(someArray[i].current_price).toFixed(2)}$`
-            linkB.innerHTML = `Price:${(someArray[i].current_price / 1.07).toFixed(2)}€`
-            linkC.innerHTML = `Price:${(someArray[i].current_price / 0.26).toFixed(2)}₪`
+            linkA.innerHTML = `Price:${(item.current_price).toFixed(2)}$`
+            linkB.innerHTML = `Price:${(item.current_price / 1.07).toFixed(2)}€`
+            linkC.innerHTML = `Price:${(item.current_price / 0.26).toFixed(2)}₪`
 
             //-------------------------------------------------------------
             // toogle switch
@@ -104,7 +106,6 @@
             switchBtnInput.setAttribute("class", "form-check-input")
             switchBtnInput.setAttribute("type", "checkbox")
             switchBtnInput.setAttribute("role", "switch")
-
             //-----------------------------------------------
 
             // reports 
@@ -146,33 +147,36 @@
                         // Set default attributes
                         switchBtnInput.checked = false
                     }
+
                 } else {
                     // Delete from reports
                     arrayReports = arrayReports.filter((report) => report.id !== item.id);
                     const json = JSON.stringify(arrayReports);
                     localStorage.setItem("reports", json);
                 }
+
             }
 
 
 
             // CHANGE FUNCTIONS FOR REPORT ARRAY
-            function changeBtnfunc(clickedItemId) {
+            function changeBtnfunc(clickedItemSymbol) {
                 // Assuming you have a function to prompt the user to select another item
-                const newItemId = prompt("Select another item:");
-
-                if (newItemId !== null) {
-                    const existingItemIndex = arrayReports.findIndex(item => item.id === clickedItemId);
-                    const newItem = arr.find(item => item.id === newItemId);
-
-                    if (existingItemIndex !== -1 && newItem && !arrayReports.some((report) => report.id === newItem.id)) {
+                const newItemSymbol = prompt("Select another item - symbol:").toLowerCase();
+                if (newItemSymbol !== null) {
+                    const existingItemIndex  = arrayReports.findIndex(item => item.symbol === clickedItemSymbol);
+                    const newItem = arr.find(item => item.symbol === newItemSymbol);
+                    if (existingItemIndex  !== -1 && newItem && !arrayReports.some((report) => report.symbol === newItem.symbol)) {
                         arrayReports[existingItemIndex] = newItem;
                         localStorage.setItem("reports", JSON.stringify(arrayReports));
-                        console.log(`Changed item with ID ${clickedItemId} to ${newItemId}`);
+                        console.log(`Changed item with ID ${clickedItemSymbol} to ${newItemSymbol}`);
                         printReports(); // Update the display
+
                     } else {
                         console.log("Invalid item selection or already exists or item not found.");
                     }
+                  
+
                 }
             }
 
@@ -181,11 +185,15 @@
                 arrayReports.forEach(item => {
                     const changeBtn = document.getElementById(`changeBtn_${item.id}`);
                     if (changeBtn) {
-                        changeBtn.addEventListener("click", () => changeBtnfunc(item.id));
+                        changeBtn.addEventListener("click", () => {
+                            changeBtnfunc(item.symbol);
+                        })
+                      
                     }
-                });
-            }
 
+                });
+
+            }
 
             // show your chosen crypto in pop-up 
             function printReports() {
@@ -206,6 +214,7 @@
                     }
                     popupText_id.innerHTML = html
                     change()
+                    
                 }
 
             }
@@ -313,4 +322,8 @@
     searchInputId.addEventListener("keydown", createCoinCardBySearch);
     searchInputId.addEventListener("click", createCoinCardBySearch);
     searchInputId.addEventListener("keyup", createCoinCardBySearch);
+
+
+
+
 })()
