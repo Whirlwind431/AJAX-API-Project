@@ -70,8 +70,6 @@
             const coinSymbol = document.createElement('p')
             const coinImg = document.createElement('img')
             const brakeEl = document.createElement('br')
-            const moreInfoBtn = document.createElement('button')
-
 
             // css 
             divElement.setAttribute("class", "coinCard")
@@ -81,42 +79,11 @@
             // set data into cells
             coinName.innerHTML = `${item.name}`
             coinSymbol.innerHTML = `${item.symbol}`
-            moreInfoBtn.innerHTML = "More info"
 
-            // buttons
-            moreInfoBtn.addEventListener("click", function () {
-                dropDownFunc(index)
-            })
-
-            //-------------------------------------------------------------
-            // dropdown menu
-            const divDropdown = document.createElement('div')
-            const interiorDiv = document.createElement('div')
-            const linkA = document.createElement('a')
-            const linkB = document.createElement('a')
-            const linkC = document.createElement('a')
-
-            // css 
-            divDropdown.setAttribute("class", "dropdown")
-            interiorDiv.setAttribute("class", "dropdown-content")
-            interiorDiv.setAttribute("id", "myDropdown")
-
-            // Add a unique ID to each dropdown to associate with the button
-            interiorDiv.setAttribute("id", `myDropdown${i}`);
-            // Add a unique ID to each button to associate with the dropdown
-            moreInfoBtn.setAttribute("data-dropdown", `myDropdown${i}`);
-
-            moreInfoBtn.setAttribute("class", "dropbtn")
-            linkA.innerHTML = `Price:${(item.current_price).toFixed(2)}$`
-            linkB.innerHTML = `Price:${(item.current_price / 1.07).toFixed(2)}€`
-            linkC.innerHTML = `Price:${(item.current_price / 0.26).toFixed(2)}₪`
-
-            //-------------------------------------------------------------
             // toogle switch
             const switchBtnDiv = document.createElement('div')
             const switchBtnInput = document.createElement('INPUT')
             const switchBtnLabel = document.createElement('LABEL')
-
 
             // css 
             switchBtnDiv.setAttribute("class", "form-check form-switch")
@@ -242,21 +209,78 @@
             divElement.appendChild(brakeEl)
 
             // dropdown menu append children
-            divDropdown.appendChild(moreInfoBtn)
-            interiorDiv.appendChild(linkA)
-            interiorDiv.appendChild(linkB)
-            interiorDiv.appendChild(linkC)
-            divDropdown.appendChild(interiorDiv)
-            divElement.appendChild(divDropdown)
+            const element = dropDownMenu(item)
+            divElement.appendChild(element)
 
             // append to main div
             divResponse.appendChild(divElement)
 
         }
     }
-    // ---------------------------------------------------------
+    //-------------------------------------------------------------
+    // Dropdown menu 
+    // When the user clicks on the button,
+    // toggle between hiding and showing the dropdown content 
+    function dropDownFunc(itemId) {
+        const dropdown = document.getElementById(`myDropdown${itemId}`)
+        dropdown.classList.toggle("show")
+    }
+
+    // create drop down elements
+    function dropDownMenu(item) {
+        // Create dropdown button
+        const divDropdown = document.createElement('div')
+        const interiorDiv = document.createElement('div')
+        const linkA = document.createElement('a')
+        const linkB = document.createElement('a')
+        const linkC = document.createElement('a')
+        const dropdownBtn = document.createElement('button');
+
+        // css 
+        divDropdown.setAttribute("class", "dropdown")
+        interiorDiv.setAttribute("class", "dropdown-content")
+        interiorDiv.setAttribute("id", "myDropdown")
+        // Add a unique ID to each dropdown to associate with the button
+        interiorDiv.setAttribute("id", `myDropdown${item.id}`);
+        // Add a unique ID to each button to associate with the dropdown
+        dropdownBtn.setAttribute("data-dropdown", `myDropdown${item.id}`);
+        dropdownBtn.setAttribute("class", "dropbtn")
+        linkA.innerHTML = `Price:${(item.current_price).toFixed(2)}$`
+        linkB.innerHTML = `Price:${(item.current_price / 1.07).toFixed(2)}€`
+        linkC.innerHTML = `Price:${(item.current_price / 0.26).toFixed(2)}₪`
+        dropdownBtn.innerHTML = "More info"
+
+        // dropdown menu append children
+        divDropdown.appendChild(dropdownBtn)
+        interiorDiv.appendChild(linkA)
+        interiorDiv.appendChild(linkB)
+        interiorDiv.appendChild(linkC)
+        divDropdown.appendChild(interiorDiv)
 
 
+        // Add event listener for moreInfoBtn
+        dropdownBtn.addEventListener("click", function () {
+            dropDownFunc(item.id)
+        });
+
+        return divDropdown
+    }
+
+    // Close the dropdown menu if the user clicks outside of it
+    document.addEventListener('click', function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            let dropdowns = document.getElementsByClassName("dropdown-content");
+            let i;
+            for (i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i]
+                // Check if openDropdown is not null or undefined before accessing classList
+                if (openDropdown && openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show')
+                }
+            }
+        }
+    });
+    //-------------------------------------------------------------
 
     // darkMode
     function darkMode() {
@@ -302,29 +326,6 @@
     }
     document.addEventListener('DOMContentLoaded', onload)
     // ---------------------------------------------------------
-
-    // Dropdown menu 
-    // When the user clicks on the button,
-    // toggle between hiding and showing the dropdown content 
-    function dropDownFunc(index) {
-        const dropdown = document.getElementById(`myDropdown${index}`);
-        dropdown.classList.toggle("show");
-    }
-
-    // Close the dropdown menu if the user clicks outside of it
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
-    // --------------------------------------------------------
 
     // Show coins by search (on  key down)
     function createCoinCardBySearch() {
