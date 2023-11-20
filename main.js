@@ -227,6 +227,7 @@
             divElement.appendChild(element)
             // append to main div
             divResponse.appendChild(divElement)
+            scroolToTop()
         }
     }
     //-------------------------D R O P D O W N     M E N U------------------------------------
@@ -380,4 +381,29 @@
         divResponse.style.display = 'flex'
         displayAllCoins(arr, arr.length)
     })
+
+    function scroolToTop() {
+
+        const showOnPx = 100;
+        const backToTopButton = document.querySelector(".back-to-top")
+
+        // if document.documentElement || document.body exists 
+        const scrollContainer = () => {
+            return document.documentElement || document.body
+        };
+
+        // statement for btn and adding event listener to btn 
+        document.addEventListener("scroll", () => {
+            if (scrollContainer().scrollTop > showOnPx) {
+                backToTopButton.classList.remove("hidden")
+            } else {
+                backToTopButton.classList.add("hidden")
+            }
+        })
+        const goToTop = () => {
+            document.body.scrollIntoView()
+        }
+        backToTopButton.addEventListener("click", goToTop)
+    }
+   
 })()
