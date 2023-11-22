@@ -167,9 +167,10 @@
             for (const item of arrayReports) {
                 html += `<div class='coinCardPopUp ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`
                 html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
-                html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`
-                html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`
-                html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p>`
+                html += `<p <h4 class="coinCardBoxHeaderReport">${item.symbol}</h4></p>`;
+                // html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`
+                // html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`
+                // html += `<p class='coinCardPriceReport'>Euro: €${(item.current_price * 0.93).toFixed(2)}</p>`
                 html += `<button id="changeBtn_${item.id}" type="button" class="btn btn-warning">Change</button></div>`
             }
             popupText_id.innerHTML = html
@@ -197,7 +198,7 @@
             coinImg.setAttribute("src", `${item.image}`)
             coinImg.setAttribute("class", "myImgDiv")
             // set data into cells
-            coinName.innerHTML = `${item.name}`
+            coinName.innerHTML = `${item.name.slice(0,5)}`
             coinSymbol.innerHTML = `${item.symbol}`
             // css 
             switchBtnDiv.setAttribute("class", "form-check form-switch")
