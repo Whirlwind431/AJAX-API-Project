@@ -32,21 +32,34 @@
 
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
-        const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2")
-        // const response = await fetch("https://api.coingecko.com/api/v3/coins/list")
-        console.log(response)
-        const coins = await response.json() // 
-        displayAllCoins(coins)
-        return coins
+        try {
+            const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
+            console.log(response)
+            if (!response.ok) {
+                throw new Error(`Error in fetching data: ${response.statusText}`);
+            }
+            const coins = await response.json()
+            displayAllCoins(coins)
+            return coins
+        } catch {
+            console.error('Error in fetching data:', error);
+            throw error;
+        }
+
     }
 
     // adding our data to local storage
     async function addToLocalStorage() {
-        const response = await ajaxRequestAllCoins()
-        const coins = JSON.stringify(response)
-        arr.push(coins)
-        console.log(arr);
-        localStorage.setItem("coins", arr)
+        try {
+            const response = await ajaxRequestAllCoins()
+            const coins = JSON.stringify(response)
+            arr.push(coins)
+            console.log(arr);
+            localStorage.setItem("coins", arr)
+        } catch {
+            console.error('Error in addToLocalStorage');
+            throw error;
+        }
     }
 
     // main function 
@@ -134,7 +147,8 @@
 
                 displayAllCoins(arr, arr.length)
             } else {
-                console.log("Invalid item selection or already exists or item not found.")
+                // console.log("Invalid item selection: already exists or item not found.")
+                alert("Invalid item selection: already exists or item not found.")
             }
 
         }
@@ -198,7 +212,7 @@
             coinImg.setAttribute("src", `${item.image}`)
             coinImg.setAttribute("class", "myImgDiv")
             // set data into cells
-            coinName.innerHTML = `${item.name.slice(0,5)}`
+            coinName.innerHTML = `${item.name.slice(0, 5)}`
             coinSymbol.innerHTML = `${item.symbol}`
             // css 
             switchBtnDiv.setAttribute("class", "form-check form-switch")
@@ -406,5 +420,5 @@
         }
         backToTopButton.addEventListener("click", goToTop)
     }
-   
+
 })()
