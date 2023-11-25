@@ -212,7 +212,7 @@
             coinImg.setAttribute("src", `${item.image}`)
             coinImg.setAttribute("class", "myImgDiv")
             // set data into cells
-            coinName.innerHTML = `${item.name.slice(0, 5)}`
+            coinName.innerHTML = `${item.name.slice(0, 8)}`
             coinSymbol.innerHTML = `${item.symbol}`
             // css 
             switchBtnDiv.setAttribute("class", "form-check form-switch")
@@ -367,28 +367,75 @@
 
     //-----------------------------C H A R T  --------------------------------
 
-    function showChart() {
+    // fetch all prices from the server (history data of pricing for choosen coin)
+    async function ajaxRequestForReports() {
 
+        let reportsArrayId = arrayReports.map(report => report.id);
+
+        console.log(reportsArrayId);
+        for (let id of reportsArrayId) {
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${20}&interval=daily&precision=2`);
+                const coinsData = await response.json()
+                const prices = coinsData.prices
+                console.log(prices)
+
+                const reportToUpdate = arrayReports.find(report => report.id === id);
+
+                // Add the prices to the report object
+                if (reportToUpdate) {
+                    reportToUpdate.prices = prices;
+                    localStorage.setItem('reportTochart', JSON.stringify(arrayReports))
+                }
+            } catch (error) {
+                console.log('Failed to fetch, coin is not exists');
+            }
+        }
+        console.log('Updated arrayReports:', arrayReports);
+    }
+    ajaxRequestForReports()
+
+
+    // show chart graph for some pages only
+    function showChart() {
         canvasSection.style.display = 'flex'
         divResponse.style.display = 'none'
     }
 
-    function createMainChart() {
 
-        const myDataAll = localStorage.getItem('reports');
+    // main chart function with checking if data exists in local storage
+    function createMainChart() {
+        const myDataAll = localStorage.getItem('reportTochart');
         const dataAll = JSON.parse(myDataAll)
+        console.log(dataAll);
         showChart()
         const dataSet = dataAll.map(x => ({
             label: x.id,
-            data: [x.current_price, x.current_price, x.current_price, x.current_price],
-            borderWidth: 1
-
+            data: x.prices,
+            borderWidth: 3
         }))
 
-        mainChart.data.labels = [1, 2, 3, 'Today']
-        mainChart.data.datasets = dataSet
+        // getting a prices in ms -> work with new Date() -> date in format YYYY-MM-DD 
+        const datesArray = dataAll && dataAll.length > 0 ?
+            dataAll[0].prices.map(item => {
+                const timeLine = item[0]
+                const date = new Date(timeLine);
+                const year = date.getFullYear();
+                // month  from zero  so +1
+                const month = date.getMonth() + 1;
+                const day = date.getDate();
+                const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+                return formattedDate
+            })
+            : [];
+        console.log(datesArray);
+        mainChart.data.labels = datesArray.concat('Today');
+        mainChart.data.datasets = dataSet;
+
         mainChart.update()
     }
+    
+    // some event listeners 
     let charts = document.getElementById("charts")
     charts.addEventListener("click", () => createMainChart())
     homePage.addEventListener("click", function () {
@@ -396,12 +443,10 @@
         divResponse.style.display = 'flex'
         displayAllCoins(arr, arr.length)
     })
-
+    // ------------- S C R O O L    A R R O W---------------------------------
     function scroolToTop() {
-
         const showOnPx = 100;
         const backToTopButton = document.querySelector(".back-to-top")
-
         // if document.documentElement || document.body exists 
         const scrollContainer = () => {
             return document.documentElement || document.body
