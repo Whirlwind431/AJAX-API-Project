@@ -28,23 +28,22 @@
     webInit()
 
     canvasSection.style.display = 'none';
-    divResponse.style.display = 'flex';
+    // divResponse.style.display = 'flex';
 
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
-        try {
+        // try {
             const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
             console.log(response)
-            if (!response.ok) {
-                throw new Error(`Error in fetching data: ${response.statusText}`);
-            }
+            // if (!response.ok) {
+            //     throw new Error(`Error in fetching data: ${response.statusText}`);
+            // }
             const coins = await response.json()
-            displayAllCoins(coins)
             return coins
-        } catch {
-            console.error('Error in fetching data:', error);
-            throw error;
-        }
+        // } catch {
+            // console.error('Error in fetching data:', error);
+            // throw error;
+        // }
 
     }
 
@@ -60,6 +59,7 @@
             console.error('Error in addToLocalStorage');
             throw error;
         }
+        webInit()
     }
 
     // main function 
