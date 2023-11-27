@@ -33,16 +33,16 @@
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
         // try {
-            const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
-            console.log(response)
-            // if (!response.ok) {
-            //     throw new Error(`Error in fetching data: ${response.statusText}`);
-            // }
-            const coins = await response.json()
-            return coins
+        const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
+        console.log(response)
+        // if (!response.ok) {
+        //     throw new Error(`Error in fetching data: ${response.statusText}`);
+        // }
+        const coins = await response.json()
+        return coins
         // } catch {
-            // console.error('Error in fetching data:', error);
-            // throw error;
+        // console.error('Error in fetching data:', error);
+        // throw error;
         // }
 
     }
@@ -372,6 +372,7 @@
 
         let reportsArrayId = arrayReports.map(report => report.id);
 
+
         console.log(reportsArrayId);
         for (let id of reportsArrayId) {
             try {
@@ -387,14 +388,25 @@
                     reportToUpdate.prices = prices;
                     localStorage.setItem('reportTochart', JSON.stringify(arrayReports))
                 }
+
             } catch (error) {
                 console.log('Failed to fetch, coin is not exists');
             }
         }
         console.log('Updated arrayReports:', arrayReports);
-    }
-    ajaxRequestForReports()
 
+    }
+    setInterval(() => {
+        localStorage.removeItem('reportTochart')
+        ajaxRequestForReports()
+        setTimeout(() => {
+            if (window.location.href.includes('#charts')) {
+                createMainChart();
+                showChart()
+            }
+        }, 1000);
+
+    }, 3600000);
 
     // show chart graph for some pages only
     function showChart() {
@@ -434,7 +446,7 @@
 
         mainChart.update()
     }
-    
+
     // some event listeners 
     let charts = document.getElementById("charts")
     charts.addEventListener("click", () => createMainChart())
