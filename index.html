@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="./dropDown.css">
     <link rel="stylesheet" href="./darkMode.css">
     <link rel="stylesheet" href="./arrowTotop.css">
+    <link rel="stylesheet" href="./aboutPage.css">
     <script src="./main.js" defer></script>
 </head>
 
@@ -47,6 +48,9 @@
                         <li class="nav-item">
                             <i class="nav-link active bi bi-lightbulb-fill darkModeBtn" id="darkModeBtn">Dark Mode</i>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#About" id="about">About</a>
+                        </li>
                     </ul>
                     <form class="d-flex" role="search ">
                         <input id="searchInputId" type="text" class="form-control me-2 " type="text"
@@ -68,7 +72,6 @@
             </div>
         </section>
         <i class="bi bi-arrow-up-circle-fill back-to-top hidden"></i>
-        <!-- <button class="back-to-top hidden">Home</button> -->
         <div class="popup" id="popup">
             <a href="#" class="popup_area"></a>
             <div class="popup_body">
@@ -79,10 +82,44 @@
                 </div>
             </div>
         </div>
-
+        <div id="aboutDiv" hidden>
+            <div id="textingDiv">
+                <h2>About Me</h2><br>
+                <h5>Civil engineer with 5 years experience. Beginning Web Developer. I am currently taking the john
+                    bryce
+                    course. My skills: javascript, css, typescript, node.js, MySql. About me: I can work in a team, able
+                    to
+                    work in stressful situations, I like to learn new things and find solutions to complex problems.
+                </h5>
+                <hr>
+                <h4>Skills</h4>
+                <ul>
+                    <li><h5>Node.js</h5></li>
+                    <li><h5>React</h5></li>
+                    <li><h5>Typescript</h5></li>
+                    <li><h5>MySql</h5></li>
+                </ul>
+                <hr>
+                <h4><b>Contact me:</b></h4>
+                <ul>
+                    <li>
+                        <h5><a href="https://github.com/Whirlwind431">Github</a></h5>
+                    </li>
+                    <li>
+                        <h5><a href="https://github.com/Whirlwind431">LinkedIn</a></h5>
+                    </li>
+                    <li>
+                        <h5><a href="nikishovvladislav1@gmail.com">Email</a></h5>
+                    </li>
+                </ul>
+            </div>
+            <div id="imgDiv">
+                <img src="./Assets/img/profile.jpg" alt="profile photo" id="profilePhoto">
+            </div>
+        </div>
 
     </div>
-    <footer class="footer"> <a href="https://github.com/Whirlwind431">&copy; Whirlwind431</a></footer>
+    <footer class="footer"> <a href="https://github.com/Whirlwind431">2023 &copy; Whirlwind431</a></footer>
 </body>
 
 </html>

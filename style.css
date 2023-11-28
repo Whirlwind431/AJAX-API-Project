@@ -22,11 +22,9 @@
 }
 
 #cardsResponse {
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     flex-wrap: wrap;
 }
 
@@ -52,7 +50,6 @@
 
 .myImgDiv:hover {
     box-shadow: 5px 5px 5px #6e6c7c;
-
 }
 
 
@@ -67,7 +64,6 @@
 .canvasStyle {
     width: 100%;
     height: 100%;
-
 }
 
 .canvasSection {

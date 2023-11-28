@@ -1,8 +1,7 @@
 
-
 (() => {
     "use strict"
-    // Global variables
+    // Global variables for chart
     const ctx = document.getElementById('mainChart');
     const canvasSection = document.getElementById("canvasSection")
     const mainChart = new Chart(ctx, {
@@ -19,6 +18,7 @@
             }
         }
     });
+
     // global variables for functions
     let arr = []
     let arrayReports = []
@@ -27,23 +27,23 @@
 
     webInit()
 
+    // hidden a chart in home page 
     canvasSection.style.display = 'none';
-    // divResponse.style.display = 'flex';
 
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
-        // try {
-        const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
-        console.log(response)
-        // if (!response.ok) {
-        //     throw new Error(`Error in fetching data: ${response.statusText}`);
-        // }
-        const coins = await response.json()
-        return coins
-        // } catch {
-        // console.error('Error in fetching data:', error);
-        // throw error;
-        // }
+        try {
+            const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
+            console.log(response)
+            if (!response.ok) {
+                throw new Error(`Error in fetching data: ${response.statusText}`);
+            }
+            const coins = await response.json()
+            return coins
+        } catch {
+            console.error('Error in fetching data:', error);
+            throw error;
+        }
 
     }
 
@@ -56,7 +56,7 @@
             console.log(arr);
             localStorage.setItem("coins", arr)
         } catch {
-            console.error('Error in addToLocalStorage');
+            console.error('Error in adding ToLocal Storage');
             throw error;
         }
         webInit()
@@ -137,12 +137,12 @@
                 console.log(`Changed item with ID ${clickedItemSymbol} to ${newItemSymbol}`)
                 printReports(); // Update the display
 
-                let result = confirm("Want to see a chart?");
+                let result = confirm("Want to see a chart?")
                 if (result) {
                     createMainChart();
                 } else {
-                    canvasSection.style.display = 'none';
-                    divResponse.style.display = 'flex';
+                    canvasSection.style.display = 'none'
+                    divResponse.style.display = 'flex'
                 }
 
                 displayAllCoins(arr, arr.length)
@@ -160,11 +160,8 @@
             const changeBtn = document.getElementById(`changeBtn_${item.id}`)
             if (changeBtn) {
                 changeBtn.addEventListener("click", () => {
-                    changeBtnfunc(item.symbol);
-
-
+                    changeBtnfunc(item.symbol)
                 })
-
             }
         });
     }
@@ -180,7 +177,7 @@
         } else {
             for (const item of arrayReports) {
                 html += `<div class='coinCardPopUp ' id="${item.id}"> <br> <img class="myImgDiv"  src="${item.image}" ></h2>`
-                html += `<p <h4 class="coinCardBoxHeaderReport">${item.name}</h4></p>`;
+                html += `<p <h4 class="coinCardBoxHeaderReport">${item.name.slice(0, 8)}</h4></p>`;
                 html += `<p <h4 class="coinCardBoxHeaderReport">${item.symbol}</h4></p>`;
                 // html += `<p class='coinCardPriceReport'>USD: $${(item.current_price * 1).toFixed(2)}</p>`
                 // html += `<p class='coinCardPriceReport'>ILS: ₪${(item.current_price * 3.51).toFixed(2)}</p>`
@@ -369,11 +366,9 @@
 
     // fetch all prices from the server (history data of pricing for choosen coin)
     async function ajaxRequestForReports() {
-
         let reportsArrayId = arrayReports.map(report => report.id);
-
-
         console.log(reportsArrayId);
+
         for (let id of reportsArrayId) {
             try {
                 const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${20}&interval=daily&precision=2`);
@@ -459,7 +454,6 @@
     function scroolToTop() {
         const showOnPx = 100;
         const backToTopButton = document.querySelector(".back-to-top")
-        // if document.documentElement || document.body exists 
         const scrollContainer = () => {
             return document.documentElement || document.body
         };
@@ -477,5 +471,15 @@
         }
         backToTopButton.addEventListener("click", goToTop)
     }
+
+    // About page
+    function showAboutPage() {
+        const aboutDiv = document.getElementById("aboutDiv")
+        aboutDiv.removeAttribute("hidden")
+        canvasSection.style.display = 'none'
+        divResponse.style.display = 'none'
+        
+    }
+    document.getElementById("about").addEventListener("click", () => showAboutPage())
 
 })()
