@@ -1,17 +1,20 @@
 #aboutDiv {
     display: flex;
+    box-sizing: border-box;
     height: 100%;
     flex-direction: row;
     justify-content: center;
     align-items: flex-start;
-    padding: 5px;
+    padding: 25px;
     margin: 5px;
+    gap: 10px;
 }
 
 
 
 #textingDiv {
     display: flex;
+    box-sizing: border-box;
     flex-direction: column;
     justify-content: flex-start;
 }

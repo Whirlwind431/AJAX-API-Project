@@ -24,6 +24,8 @@
     let arrayReports = []
     const divResponse = document.getElementById("cardsResponse")
     const homePage = document.getElementById("homePage")
+    const aboutDiv = document.getElementById("aboutDiv")
+
 
     webInit()
 
@@ -366,6 +368,11 @@
 
     // fetch all prices from the server (history data of pricing for choosen coin)
     async function ajaxRequestForReports() {
+        localStorage.removeItem('reportTochart')
+        if (arrayReports.length === 0 || arrayReports === null) {
+            alert("Add some crypto to favorites!")
+            return
+        }
         let reportsArrayId = arrayReports.map(report => report.id);
         console.log(reportsArrayId);
 
@@ -391,6 +398,7 @@
         console.log('Updated arrayReports:', arrayReports);
 
     }
+    // ajaxRequestForReports()
     setInterval(() => {
         localStorage.removeItem('reportTochart')
         ajaxRequestForReports()
@@ -407,39 +415,53 @@
     function showChart() {
         canvasSection.style.display = 'flex'
         divResponse.style.display = 'none'
+        aboutDiv.style.display = 'none'
     }
 
 
     // main chart function with checking if data exists in local storage
-    function createMainChart() {
-        const myDataAll = localStorage.getItem('reportTochart');
-        const dataAll = JSON.parse(myDataAll)
-        console.log(dataAll);
-        showChart()
-        const dataSet = dataAll.map(x => ({
-            label: x.id,
-            data: x.prices,
-            borderWidth: 3
-        }))
+    async function createMainChart() {
+        try {
+            await ajaxRequestForReports()
 
-        // getting a prices in ms -> work with new Date() -> date in format YYYY-MM-DD 
-        const datesArray = dataAll && dataAll.length > 0 ?
-            dataAll[0].prices.map(item => {
-                const timeLine = item[0]
-                const date = new Date(timeLine);
-                const year = date.getFullYear();
-                // month  from zero  so +1
-                const month = date.getMonth() + 1;
-                const day = date.getDate();
-                const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-                return formattedDate
-            })
-            : [];
-        console.log(datesArray);
-        mainChart.data.labels = datesArray.concat('Today');
-        mainChart.data.datasets = dataSet;
+            const myDataAll = localStorage.getItem('reportTochart');
+            if (myDataAll !== null) {
 
-        mainChart.update()
+
+                const dataAll = JSON.parse(myDataAll)
+                console.log(dataAll);
+
+
+                showChart()
+
+                const dataSet = dataAll.map(x => ({
+                    label: x.id,
+                    data: x.prices,
+                    borderWidth: 3
+                }))
+
+                // getting a prices in ms -> work with new Date() -> date in format YYYY-MM-DD 
+                const datesArray = dataAll && dataAll.length > 0 ?
+                    dataAll[0].prices.map(item => {
+                        const timeLine = item[0]
+                        const date = new Date(timeLine);
+                        const year = date.getFullYear();
+                        // month  from zero  so +1
+                        const month = date.getMonth() + 1;
+                        const day = date.getDate();
+                        const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+                        return formattedDate
+                    })
+                    : [];
+                console.log(datesArray);
+                mainChart.data.labels = datesArray.concat('Today');
+                mainChart.data.datasets = dataSet;
+
+                mainChart.update()
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     // some event listeners 
@@ -474,11 +496,11 @@
 
     // About page
     function showAboutPage() {
-        const aboutDiv = document.getElementById("aboutDiv")
         aboutDiv.removeAttribute("hidden")
+        aboutDiv.style.display = 'flex'
         canvasSection.style.display = 'none'
         divResponse.style.display = 'none'
-        
+
     }
     document.getElementById("about").addEventListener("click", () => showAboutPage())
 
