@@ -25,6 +25,7 @@
     const divResponse = document.getElementById("cardsResponse")
     const homePage = document.getElementById("homePage")
     const aboutDiv = document.getElementById("aboutDiv")
+    const formSearch = document.getElementById("formSearch")
 
 
     webInit()
@@ -366,9 +367,59 @@
 
     //-----------------------------C H A R T  --------------------------------
 
+    // time range in main chart
+    function chooseTimeRange() {
+        const timeRangeInput = document.getElementById("timeRangeInput")
+        let timeRange
+
+        if (timeRangeInput.value === "1 year") {
+            timeRange = 365
+
+        } else if (timeRangeInput.value === "9 month") {
+            timeRange = 270
+
+        } else if (timeRangeInput.value === "6 month") {
+            timeRange = 180
+
+        } else if (timeRangeInput.value === "3 month") {
+            timeRange = 90
+
+        } else if (timeRangeInput.value === "1 month") {
+            timeRange = 30
+
+        } else if (timeRangeInput.value === "2 weeks") {
+            timeRange = 14
+
+        } else if (timeRangeInput.value === "1 week") {
+            timeRange = 7
+        }
+        console.log(timeRange);
+        return timeRange
+    }
+
+    const timeRangeInput = document.getElementById("timeRangeInput")
+    timeRangeInput.addEventListener("change", () => {
+        ajaxRequestForReports()
+        createMainChart();
+        showChart()
+    })
+
+    // canvas responsive 😎
+    function resizeCanvas() {
+        const canvas = document.getElementById('mainChart');
+        canvas.style.width = '100%'
+        canvas.style.height = 'auto'
+        mainChart.update()
+        showChart()
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("load", resizeCanvas);
+
     // fetch all prices from the server (history data of pricing for choosen coin)
     async function ajaxRequestForReports() {
         localStorage.removeItem('reportTochart')
+        let timeRange
         if (arrayReports.length === 0 || arrayReports === null) {
             alert("Add some crypto to favorites!")
             return
@@ -378,7 +429,9 @@
 
         for (let id of reportsArrayId) {
             try {
-                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${20}&interval=daily&precision=2`);
+                timeRange = chooseTimeRange()
+                timeRange !== undefined ? timeRange : timeRange = 14
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=${timeRange}&interval=daily&precision=2`);
                 const coinsData = await response.json()
                 const prices = coinsData.prices
                 console.log(prices)
@@ -392,12 +445,12 @@
                 }
 
             } catch (error) {
-                console.log('Failed to fetch, coin is not exists');
+                console.log(error.message);
             }
         }
         console.log('Updated arrayReports:', arrayReports);
-
     }
+
     // ajaxRequestForReports()
     setInterval(() => {
         localStorage.removeItem('reportTochart')
@@ -409,13 +462,15 @@
             }
         }, 1000);
 
-    }, 3600000);
+    }, 360000);
+
 
     // show chart graph for some pages only
     function showChart() {
         canvasSection.style.display = 'flex'
         divResponse.style.display = 'none'
         aboutDiv.style.display = 'none'
+
     }
 
 
@@ -426,14 +481,9 @@
 
             const myDataAll = localStorage.getItem('reportTochart');
             if (myDataAll !== null) {
-
-
                 const dataAll = JSON.parse(myDataAll)
                 console.log(dataAll);
-
-
                 showChart()
-
                 const dataSet = dataAll.map(x => ({
                     label: x.id,
                     data: x.prices,
@@ -472,6 +522,7 @@
         divResponse.style.display = 'flex'
         displayAllCoins(arr, arr.length)
     })
+
     // ------------- S C R O O L    A R R O W---------------------------------
     function scroolToTop() {
         const showOnPx = 100;
