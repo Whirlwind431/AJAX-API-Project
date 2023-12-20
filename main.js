@@ -414,7 +414,7 @@
     }
 
     window.addEventListener("resize", resizeCanvas);
- 
+
 
     // fetch all prices from the server (history data of pricing for choosen coin)
     async function ajaxRequestForReports() {
@@ -458,11 +458,10 @@
         setTimeout(() => {
             if (window.location.href.includes('#charts')) {
                 createMainChart();
-                showChart()
             }
         }, 1000);
 
-    }, 360000);
+    }, 3600000);
 
 
     // show chart graph for some pages only
