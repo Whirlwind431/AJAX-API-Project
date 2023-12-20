@@ -414,7 +414,7 @@
     }
 
     window.addEventListener("resize", resizeCanvas);
-    window.addEventListener("load", resizeCanvas);
+ 
 
     // fetch all prices from the server (history data of pricing for choosen coin)
     async function ajaxRequestForReports() {
@@ -470,7 +470,6 @@
         canvasSection.style.display = 'flex'
         divResponse.style.display = 'none'
         aboutDiv.style.display = 'none'
-
     }
 
 
@@ -478,7 +477,6 @@
     async function createMainChart() {
         try {
             await ajaxRequestForReports()
-
             const myDataAll = localStorage.getItem('reportTochart');
             if (myDataAll !== null) {
                 const dataAll = JSON.parse(myDataAll)
