@@ -36,7 +36,7 @@
     // fetch all coins from server
     async function ajaxRequestAllCoins() {
         try {
-            const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=2");
+            const response = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=50&page=2");
             console.log(response)
             if (!response.ok) {
                 throw new Error(`Error in fetching data: ${response.statusText}`);
@@ -411,10 +411,9 @@
         canvas.style.height = 'auto'
         mainChart.update()
         if (window.location.href.includes('#charts')) {
-            createMainChart();
+            // createMainChart();
             showChart()
         }
-        
     }
 
     window.addEventListener("resize", resizeCanvas);
@@ -455,17 +454,21 @@
         console.log('Updated arrayReports:', arrayReports);
     }
 
-    // ajaxRequestForReports()
+    // refreshing data in reports
     setInterval(() => {
         localStorage.removeItem('reportTochart')
+        localStorage.removeItem('reportTochart')
+        localStorage.removeItem('reports')
         ajaxRequestForReports()
         setTimeout(() => {
             if (window.location.href.includes('#charts')) {
                 createMainChart();
+                showChart()
             }
         }, 1000);
 
-    }, 3600000);
+    }, 60000);
+
 
 
     // show chart graph for some pages only
