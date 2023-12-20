@@ -410,7 +410,11 @@
         canvas.style.width = '100%'
         canvas.style.height = 'auto'
         mainChart.update()
-        showChart()
+        if (window.location.href.includes('#charts')) {
+            createMainChart();
+            showChart()
+        }
+        
     }
 
     window.addEventListener("resize", resizeCanvas);
