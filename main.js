@@ -457,8 +457,6 @@
     // refreshing data in reports
     setInterval(() => {
         localStorage.removeItem('reportTochart')
-        localStorage.removeItem('reportTochart')
-        localStorage.removeItem('reports')
         ajaxRequestForReports()
         setTimeout(() => {
             if (window.location.href.includes('#charts')) {
